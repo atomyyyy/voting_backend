@@ -44,7 +44,7 @@ What things you need to install and how to install them:
 | Name | Required | Value |
 |------|----------|---------|
 | `SECRET_KEY` | :heavy_check_mark: | String |
-| `DATABASE_URL` | :x: | SQL String |
+| `DATABASE_URL` | :heavy_check_mark: | SQL String |
 
 Example setup (copying this would not work):
 
