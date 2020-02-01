@@ -36,7 +36,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = [
-    'v0tingapp.ap-southeast-1.elasticbeanstalk.com'
+    '*',
 ]
 
 
