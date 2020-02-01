@@ -55,9 +55,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -85,8 +85,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'voting_backend.wsgi.application'
 
 # CORS Whitelist
-CORS_ORIGIN_WHITELIST = [
-    '*'
+CORS_ORIGIN_REGEX_WHITELIST = [
+    r'.*',
 ]
 
 # Rest Framework Setting
