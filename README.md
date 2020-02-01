@@ -84,8 +84,8 @@ DATABASE_URL=postgres://username:password@localhost:5432/voting_app
    python manage.py loaddata ./voting_backend/fixtures/voting_option.json --database=default
    python manage.py loaddata ./voting_backend/fixtures/voting_record.json --database=default
 
-5. Run the development server
+5. Run the server
 
    ```shell
-   pipenv run start
+   python manage.py runserver
    ```
