@@ -12,7 +12,7 @@ django-environ = "*"
 djangorestframework = "*"
 pylint-django = "*"
 django-filter = "*"
-psycopg2-binary = "*"
+psycopg2 = "*"
 
 [requires]
 python_version = "3.6"
