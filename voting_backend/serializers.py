@@ -1,5 +1,7 @@
 from rest_framework import serializers
+
 from .models import VoteCampaign, VoteOption, VoteRecord
+
 
 class VoteCampaignListSerializer(serializers.ModelSerializer):
     is_active_campaign = serializers.BooleanField()

@@ -1,16 +1,20 @@
-from django.db.models import Count, Prefetch, prefetch_related_objects
-from django.db import IntegrityError
-from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import IntegrityError
+from django.db.models import Count, Prefetch, prefetch_related_objects
+from django.http import Http404
 from django.utils import timezone
-from rest_framework.generics import ListAPIView, RetrieveAPIView, GenericAPIView
-from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.generics import (GenericAPIView, ListAPIView,
+                                    RetrieveAPIView)
+from rest_framework.response import Response
 
-from .models import VoteCampaign, VoteOption, VoteRecord
-from .serializers import VoteCampaignListSerializer, VoteCampaignDetailSerializer, VoteRecordSerializer
+from .exceptions import (AlreadyVoteException, InternalServerError,
+                        InvalidFormException, NotFoundException)
 from .form import VoteRecordForm
-from .exceptions import InvalidFormException, AlreadyVoteException, NotFoundException, InternalServerError
+from .models import VoteCampaign, VoteOption, VoteRecord
+from .serializers import (VoteCampaignDetailSerializer,
+                        VoteCampaignListSerializer, VoteRecordSerializer)
+
 
 class CampaignOverviewListView(ListAPIView):
     """
@@ -47,6 +51,8 @@ class CampaignDetailRetrieveView(RetrieveAPIView):
             'option_set',
             queryset=VoteOption.objects.filter(
                 campaign=obj
+            ).order_by(
+                'option_code'
             ).annotate(
                 number_of_vote=Count('record_set')
             )

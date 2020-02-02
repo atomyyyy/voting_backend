@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.urls import path
 
-from .views import CampaignOverviewListView, CampaignDetailRetrieveView, VoteRecordView
+from .views import (CampaignDetailRetrieveView, CampaignOverviewListView,
+                    VoteRecordView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),

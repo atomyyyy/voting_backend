@@ -1,5 +1,6 @@
-from rest_framework import exceptions
 from django.utils.translation import gettext_lazy as _
+from rest_framework import exceptions
+
 
 class InvalidFormException(exceptions.ParseError):
     default_detail = _('INVALID_INPUT')
