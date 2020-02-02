@@ -79,10 +79,9 @@ DATABASE_URL=postgres://username:password@localhost:5432/voting_app
 4. Load data fixtures
 
    ```shell
-   # Product Types
-   python manage.py loaddata ./voting_backend/fixtures/voting_campaign.json --database=default 
-   python manage.py loaddata ./voting_backend/fixtures/voting_option.json --database=default
-   python manage.py loaddata ./voting_backend/fixtures/voting_record.json --database=default
+   python manage.py loaddata ./voting_backend/fixtures/vote_campaign.json --database=default 
+   python manage.py loaddata ./voting_backend/fixtures/vote_option.json --database=default
+   python manage.py loaddata ./voting_backend/fixtures/vote_record.json --database=default
 
 5. Run the server
 
