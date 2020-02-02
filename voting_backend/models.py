@@ -17,7 +17,10 @@ class VoteCampaign(models.Model):
     
     @property
     def is_active_campaign(self):
-        return timezone.make_aware(timezone.now(), timezone.utc) < timezone.make_aware(self.end_time, timezone.utc)
+        current_time = timezone.make_aware(timezone.now(), timezone.utc)
+        if current_time >= timezone.make_aware(self.start_time, timezone.utc) and current_time < timezone.make_aware(self.end_time, timezone.utc):
+            return True
+        return False
 
     def save(self, *args, **kwargs):
         if self.end_time <= self.start_time:
