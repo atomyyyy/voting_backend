@@ -28,4 +28,4 @@ class TestVoteRecordForm(TestCase):
     def test_can_identify_missing_input(self):
         test_form = self.form({'hkid': 'Y7280422'})
         test_form.full_clean()
-        self.assertEqual(test_form.is_valid(), False)
+        self.assertFalse(test_form.is_valid())

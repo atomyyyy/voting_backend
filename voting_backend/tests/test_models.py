@@ -9,6 +9,7 @@ import voting_backend.models as models
 
 
 class TestVoteCampaignModel(TestCase):
+    multi_db = True
     model = models.VoteCampaign
 
     def setUp(self):
@@ -23,12 +24,16 @@ class TestVoteCampaignModel(TestCase):
         self.assertEqual(str(self.campaign), '1: How are you')
     
     @patch('django.utils.timezone.now', return_value=datetime.datetime(2000, 2, 1, 0, 0, 0))
-    def test_can_identify_inactive_status(self, mock_datetime):
-        self.assertEqual(self.campaign.is_active_campaign, False)
+    def test_can_identify_closed_status(self, mock_datetime):
+        self.assertEqual(self.campaign.status, 'CLOSED')
     
     @patch('django.utils.timezone.now', return_value=datetime.datetime(2000, 1, 1, 0, 0, 0))
     def test_can_identify_active_status(self, mock_datetime):
-        self.assertEqual(self.campaign.is_active_campaign, True)
+        self.assertEqual(self.campaign.status, 'ACTIVE')
+
+    @patch('django.utils.timezone.now', return_value=datetime.datetime(1999, 1, 1, 0, 0, 0))
+    def test_can_identify_not_start_status(self, mock_datetime):
+        self.assertEqual(self.campaign.status, 'NOT_START')
     
     def test_can_prevent_saving_record_with_improper_start_end_date(self):
         with self.assertRaises(ValidationError):
@@ -40,6 +45,7 @@ class TestVoteCampaignModel(TestCase):
 
 
 class TestVoteOptionModel(TestCase):
+    multi_db = True
     model = models.VoteOption
 
     def setUp(self):
@@ -59,6 +65,7 @@ class TestVoteOptionModel(TestCase):
 
 
 class TestVoteRecordModel(TestCase):
+    multi_db = True
     model = models.VoteRecord
     user_id = 'A123456'
 

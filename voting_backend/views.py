@@ -45,7 +45,8 @@ class CampaignDetailRetrieveView(RetrieveAPIView):
             obj = super().get_object()
         except Http404:
             raise NotFoundException()
-        except Exception:
+        except Exception as e:
+            print(e)
             raise InternalServerError()
         prefetch_related_objects([obj], Prefetch(
             'option_set',
@@ -80,7 +81,11 @@ class VoteRecordView(GenericAPIView):
 
         cleaned_data = form.cleaned_data
         try:
-            campaign = VoteCampaign.objects.filter(end_time__gt=timezone.make_aware(timezone.now(), timezone.utc)).get(campaign_id=kwargs.get('campaign_id'))
+            current_time = timezone.now()
+            campaign = VoteCampaign.objects.filter(
+                end_time__gt=timezone.make_aware(current_time, timezone.utc),
+                start_time__lte=timezone.make_aware(current_time, timezone.utc),
+            ).get(campaign_id=kwargs.get('campaign_id'))
             option = VoteOption.objects.filter(campaign=campaign).get(option_code=cleaned_data.get('option_code'))
             hkid = cleaned_data.get('hkid')
             instance = self.model(campaign=campaign, option=option, user_id=hkid)

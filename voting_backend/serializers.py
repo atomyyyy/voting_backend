@@ -4,7 +4,7 @@ from .models import VoteCampaign, VoteOption, VoteRecord
 
 
 class VoteCampaignListSerializer(serializers.ModelSerializer):
-    is_active_campaign = serializers.BooleanField()
+    status = serializers.CharField()
     number_of_vote = serializers.IntegerField()
 
     class Meta:
@@ -14,7 +14,7 @@ class VoteCampaignListSerializer(serializers.ModelSerializer):
             'question',
             'start_time',
             'end_time',
-            'is_active_campaign',
+            'status',
             'number_of_vote'
         )
 
@@ -28,6 +28,7 @@ class VoteOptionSerializer(serializers.ModelSerializer):
 
 
 class VoteCampaignDetailSerializer(VoteCampaignListSerializer):
+    status = serializers.CharField()
     options = VoteOptionSerializer(source='option_set', many=True)
 
     class Meta(VoteCampaignListSerializer.Meta):
@@ -36,7 +37,7 @@ class VoteCampaignDetailSerializer(VoteCampaignListSerializer):
             'question',
             'start_time',
             'end_time',
-            'is_active_campaign',
+            'status',
             'options'           
         )
 

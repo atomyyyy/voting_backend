@@ -16,11 +16,13 @@ class VoteCampaign(models.Model):
         return f'{self.campaign_id}: {self.question}'
     
     @property
-    def is_active_campaign(self):
+    def status(self):
         current_time = timezone.make_aware(timezone.now(), timezone.utc)
-        if current_time >= timezone.make_aware(self.start_time, timezone.utc) and current_time < timezone.make_aware(self.end_time, timezone.utc):
-            return True
-        return False
+        if current_time < timezone.make_aware(self.start_time, timezone.utc):
+            return 'NOT_START'
+        if current_time >= timezone.make_aware(self.end_time, timezone.utc):
+            return 'CLOSED'
+        return 'ACTIVE'
 
     def save(self, *args, **kwargs):
         if self.end_time <= self.start_time:
