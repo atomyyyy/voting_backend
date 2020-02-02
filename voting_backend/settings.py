@@ -8,6 +8,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Read .env file
 env = environ.Env(
     SECRET_KEY=(str, ''),
+    ALLOWED_HOST=(str, ''),
+    CORS_ORIGIN_WHITELIST=(str, ''),
     DEBUG=(bool, False)
 )
 
@@ -25,7 +27,7 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = [
-    '*'
+    env('ALLOWED_HOST')
 ]
 
 # Application definition
