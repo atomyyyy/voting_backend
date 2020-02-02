@@ -10,7 +10,7 @@ from rest_framework.response import Response
 
 from .exceptions import (AlreadyVoteException, InternalServerError,
                         InvalidFormException, NotFoundException)
-from .form import VoteRecordForm
+from .forms import VoteRecordForm
 from .models import VoteCampaign, VoteOption, VoteRecord
 from .serializers import (VoteCampaignDetailSerializer,
                         VoteCampaignListSerializer, VoteRecordSerializer)
