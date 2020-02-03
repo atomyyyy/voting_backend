@@ -47,7 +47,7 @@ class VoteOption(models.Model):
 
 class VoteRecord(models.Model):
     """
-    Model storing all previous voting record
+    Model storing all previous voting records
     """
     campaign = models.ForeignKey(VoteCampaign, on_delete=models.CASCADE, related_name='record_set')
     option = models.ForeignKey(VoteOption, on_delete=models.CASCADE, related_name='record_set')

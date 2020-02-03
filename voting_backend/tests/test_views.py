@@ -1,4 +1,5 @@
 import datetime
+import hashlib
 from unittest.mock import patch
 
 from django.urls import reverse
@@ -34,7 +35,7 @@ class TestCampaignOverviewListView(APITestCase):
         self.record = models.VoteRecord.objects.create(
             campaign=models.VoteCampaign.objects.get(question='How are you'),
             option=models.VoteOption.objects.get(option_detail='great'),
-            user_id='A1234567'
+            user_id=hashlib.sha256('A1234567'.encode('utf-8')).hexdigest()
         )
 
     def test_can_get_all_campaign(self):
@@ -76,7 +77,7 @@ class TestCampaignDetailRetrieveView(APITestCase):
         self.record = models.VoteRecord.objects.create(
             campaign=self.campaign,
             option=self.options[0],
-            user_id='A1234567'
+            user_id=hashlib.sha256('A1234567'.encode('utf-8')).hexdigest()
         )
 
     def test_can_get_corresponding_campaign(self):
@@ -146,7 +147,7 @@ class TestVoteRecordView(APITestCase):
         self.record = models.VoteRecord.objects.create(
             campaign=self.campaigns[0],
             option=self.options[0],
-            user_id='Y7280422'
+            user_id=hashlib.sha256('Y7280422'.encode('utf-8')).hexdigest()
         )
 
     @patch('django.utils.timezone.now', return_value=datetime.datetime(2000, 1, 1, 0, 0, 0))
@@ -166,13 +167,21 @@ class TestVoteRecordView(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(str(response.data['detail']), 'ALREADY_VOTE')
 
+    @patch('django.utils.timezone.now', return_value=datetime.datetime(2000, 1, 1, 0, 0, 0))
+    def test_can_identify_lower_case_hkid(self, mock_datetime):
+        response = self.client.post(
+            reverse('vote', args=[self.campaigns[0].campaign_id]),
+            data={'hkid': 'y7280422', 'option_code': 'b'}
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(str(response.data['detail']), 'ALREADY_VOTE')
+
     @patch('django.utils.timezone.now', return_value=datetime.datetime(2000, 2, 1, 0, 0, 0))
     def test_can_prevent_vote_if_vote_already_closed(self, mock_datetime):
         response = self.client.post(
             reverse('vote', args=[self.campaigns[0].campaign_id]),
             data={'hkid': 'Q7853943', 'option_code': 'b'}
         )
-        print(response.data)
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(str(response.data['detail']), 'INVALID_INPUT')
 

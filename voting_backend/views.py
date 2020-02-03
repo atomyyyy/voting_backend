@@ -1,3 +1,5 @@
+import hashlib
+
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Count, Prefetch, prefetch_related_objects
@@ -26,6 +28,8 @@ class CampaignOverviewListView(ListAPIView):
     def get_queryset(self):
         queryset = self.model.objects.all().annotate(
             number_of_vote=Count('record_set')
+        ).order_by(
+            '-end_time'
         )
         return queryset
 
@@ -45,8 +49,7 @@ class CampaignDetailRetrieveView(RetrieveAPIView):
             obj = super().get_object()
         except Http404:
             raise NotFoundException()
-        except Exception as e:
-            print(e)
+        except Exception:
             raise InternalServerError()
         prefetch_related_objects([obj], Prefetch(
             'option_set',
@@ -88,7 +91,9 @@ class VoteRecordView(GenericAPIView):
             ).get(campaign_id=kwargs.get('campaign_id'))
             option = VoteOption.objects.filter(campaign=campaign).get(option_code=cleaned_data.get('option_code'))
             hkid = cleaned_data.get('hkid')
-            instance = self.model(campaign=campaign, option=option, user_id=hkid)
+            # HKID will be hashed before saved to avoid privacy issue on storing hkid
+            hashed_hkid = hashlib.sha256(hkid.encode('utf-8')).hexdigest()
+            instance = self.model(campaign=campaign, option=option, user_id=hashed_hkid)
             instance.save()
             return Response(self.serializer(instance).data, status=status.HTTP_201_CREATED)
         except ObjectDoesNotExist:
