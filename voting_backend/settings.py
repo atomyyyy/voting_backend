@@ -9,7 +9,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env(
     SECRET_KEY=(str, ''),
     ALLOWED_HOST=(str, ''),
-    CORS_ORIGIN_WHITELIST=(str, ''),
+    CORS_REGEX=(str, ''),
     DEBUG=(bool, False)
 )
 
@@ -75,8 +75,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'voting_backend.wsgi.application'
 
 # CORS Whitelist
-CORS_ORIGIN_WHITELIST = [
-    env('CORS_ORIGIN_WHITELIST'),
+CORS_ORIGIN_REGEX_WHITELIST = [
+    r'^http:\/\/{0}$'.format(env('CORS_REGEX')),
 ]
 
 # Rest Framework Setting
