@@ -75,8 +75,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'voting_backend.wsgi.application'
 
 # CORS Whitelist
-CORS_ORIGIN_REGEX_WHITELIST = [
-    r'^http:\/\/{0}$'.format(env('CORS_REGEX')),
+CORS_ORIGIN_WHITELIST = [
+    env('CORS_WHITELIST'),
 ]
 
 # Rest Framework Setting
