@@ -28,7 +28,6 @@ class VoteOptionSerializer(serializers.ModelSerializer):
 
 
 class VoteCampaignDetailSerializer(VoteCampaignListSerializer):
-    status = serializers.CharField()
     options = VoteOptionSerializer(source='option_set', many=True)
 
     class Meta(VoteCampaignListSerializer.Meta):

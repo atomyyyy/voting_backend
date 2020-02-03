@@ -74,7 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'voting_backend.wsgi.application'
 
-# CORS Whitelist
+CORS_ORIGIN_ALLOW_ALL = DEBUG
 CORS_ORIGIN_WHITELIST = [
     env('CORS_WHITELIST'),
 ]

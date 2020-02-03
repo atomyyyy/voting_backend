@@ -46,7 +46,8 @@ What things you need to install and how to install them:
 | `SECRET_KEY` | :heavy_check_mark: | String |
 | `DATABASE_URL` | :heavy_check_mark: | SQL String |
 | `ALLOWED_HOST` | :heavy_check_mark: | Domain |
-| `CORE_WHITELIST` | :heavy_check_mark: | URL |
+| `CORS_WHITELIST` | :heavy_check_mark: | URL |
+| `DEBUG` |  | Boolean |
 
 Example setup (copying this would not work):
 
@@ -55,6 +56,7 @@ SECRET_KEY=a-very-long-secret-key
 DATABASE_URL=postgres://username:password@localhost:5432/voting_app
 ALLOWED_HOST=localhost
 CORS_ORIGIN_WHITELIST=http://d6ch9wct0rzng.cloudfront.net
+DEBUG=True
 
 ```
 

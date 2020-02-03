@@ -1,0 +1,134 @@
+swagger: "2.0"
+info:
+  title: Voting API Documentation
+  description: Documentation for basic voting API
+  version: 1.0.0
+host: "localhost:8000"
+schemes: 
+- "http"
+
+paths:
+  /campaign/:
+    get:
+      summary: Returns a list of voting campaigns
+      description: Campaign ID, Question name and total number of vote will be returned
+      responses:
+        '200':
+          description: A JSON array of campaign overviews
+          schema:
+            type: "array"
+            items:
+              $ref: '#/definitions/VoteCampaign'
+
+  /campaign/{campaign_id}/:
+    get:
+      summary: Return a voting campaign with all options
+      description: Option code, Option detail and voted number will be returned for each option
+      parameters:
+      - name: "campaign_id"
+        type: "number"
+        in: "path"
+        required: true
+        description: "The id of campaign that needed to be fetched"
+      responses:
+        '200':
+          description: A JSON object of the selected campaign
+          schema:
+            type: "object"
+            properties:
+              options:
+                type: array
+                items:
+                  $ref: '#/definitions/VoteOption'
+              campaign_id:
+                $ref: '#/definitions/VoteCampaign/properties/campaign_id'
+              question:
+                $ref: '#/definitions/VoteCampaign/properties/question'
+              start_time:
+                $ref: '#/definitions/VoteCampaign/properties/start_time'          
+              end_time:
+                $ref: '#/definitions/VoteCampaign/properties/end_time'          
+              status:
+                $ref: '#/definitions/VoteCampaign/properties/status'          
+        '404':
+          description: Occur when no corresponding campaign exists.
+          schema:
+            type: "object"
+            properties:
+              detail:
+                type: string
+                example: 'NOT_FOUND'
+    
+  /vote/{campaign_id}/:
+    post:
+      summary: Vote for an acitve voting campaign
+      description: HKID and option is needed. One HKID can only be voted for one time
+      consumes:
+      - "application/x-www-form-urlencoded"
+      parameters:
+      - name: "campaign_id"
+        type: "number"
+        in: "path"
+        required: true
+        description: "The id of campaign that intends to vote"
+      - name: "hkid"
+        type: "string"
+        in: "formData"
+        required: true
+        description: "A valid hkid is required"
+      - name: "option_code"
+        type: "string"
+        in: "formData"
+        required: true
+        description: "A valid option code is required"
+      responses:
+        '201':
+          description: Occur when record is successfully created
+          schema:
+            type: "object"
+            properties:
+              create_time:
+                type: "string"
+                example: "2019-01-01T00:00:00"        
+        '400':
+          description: Occur when record is not succesffully created
+          schema:
+            type: "object"
+            properties:
+              detail:
+                type: "string"
+                enum: ["INVALID_DATA", "ALREADY_VOTE"]
+                example: "ALREADY_VOTE"
+        
+definitions:
+  VoteCampaign:
+    type: "object"
+    properties:
+      campaign_id:
+        type: "integer"
+        example: 1
+      question:
+        type: "string"
+        example: "How are you?"
+      start_time:
+        type: "string"
+        example: "2019-01-01T00:00:00"
+      end_time:
+        type: "string"
+        example: "2019-00-01T00:00:00"
+      status:
+        type: "string"
+        enum: ['ACTIVE', 'NOT_START', 'CLOSED']
+        example: 'CLOSED'
+      number_of_vote:
+        type: "integer"
+        example: 1234
+  VoteOption:
+    type: "object"
+    properties:
+      option_code:
+        type: "string"
+      option_detail:
+        type: "string"
+      number_of_vote:
+        type: "integer"
