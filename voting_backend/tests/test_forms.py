@@ -21,6 +21,10 @@ class TestHKIDField(TestCase):
         cleaned_value = self.field.clean('Y7280422')
         self.assertEqual(cleaned_value, 'Y7280422')
 
+    def test_can_transform_lower_letter_to_upper_letter(self):
+        cleaned_value = self.field.clean('y7280422')
+        self.assertEqual(cleaned_value, 'Y7280422')
+
 
 class TestVoteRecordForm(TestCase):
     form = forms.VoteRecordForm

@@ -32,6 +32,12 @@ class HKIDField(forms.CharField):
             return sum([(9-ix) * self.id_char_to_value(digit) for ix, digit in enumerate(value)])
         return  58*9 + sum([(8-ix)*self.id_char_to_value(digit) for ix, digit in enumerate(value)])
 
+    def clean(self, data, initial=None):
+        # Turn all letter to upper before performing clean
+        if type(data) == str:
+            return super().clean(data.upper())
+        return super().clean(data)
+
     def validate(self, value):
         super().validate(value)
         if not re.match('^([A-Z]{1,2})([0-9]{6})([A0-9])$', value):
@@ -39,11 +45,6 @@ class HKIDField(forms.CharField):
         digit_sum = self.get_digit_sum(value[:-1])
         if not self.hkid_checksum(digit_sum, value[-1]):
             raise ValidationError(message='INCORRECT_CHECKSUM')
-    
-    def prepare_value(self, value):
-        if isinstance(value, str):
-            return value.upper()
-        return value
 
 
 class VoteRecordForm(forms.Form):
