@@ -23,7 +23,7 @@ paths:
   /campaign/{campaign_id}/:
     get:
       summary: Return a voting campaign with all options
-      description: Option code, Option detail and voted number will be returned for each option
+      description: Option code, option detail and vote number will be returned for each option
       parameters:
       - name: "campaign_id"
         type: "number"
@@ -62,7 +62,7 @@ paths:
   /vote/{campaign_id}/:
     post:
       summary: Vote for an acitve voting campaign
-      description: HKID and option is needed. One HKID can only be voted for one time
+      description: HKID and option is needed. One HKID can only be vote for one time within the campaign.
       consumes:
       - "application/x-www-form-urlencoded"
       parameters:
@@ -70,12 +70,12 @@ paths:
         type: "number"
         in: "path"
         required: true
-        description: "The id of campaign that intends to vote"
+        description: "The id of campaign to vote."
       - name: "hkid"
         type: "string"
         in: "formData"
         required: true
-        description: "A valid hkid is required"
+        description: "A valid hkid is expected. Only alphabets and numbers are allowed."
       - name: "option_code"
         type: "string"
         in: "formData"
@@ -89,9 +89,9 @@ paths:
             properties:
               create_time:
                 type: "string"
-                example: "2019-01-01T00:00:00"        
+                example: "2019-01-01T00:00:00.000000"        
         '400':
-          description: Occur when record is not succesffully created
+          description: If the user has already voted in the campaign, ALREADY_VOTE message will be returned. If the campaign is not active, or option code does not match the campaign, or the hkid is invalid, INVALID_DATA will be retured.
           schema:
             type: "object"
             properties:
@@ -112,10 +112,10 @@ definitions:
         example: "How are you?"
       start_time:
         type: "string"
-        example: "2019-01-01T00:00:00"
+        example: "2019-01-01T00:00:00.000000"
       end_time:
         type: "string"
-        example: "2019-00-01T00:00:00"
+        example: "2019-00-01T00:00:00.000000"
       status:
         type: "string"
         enum: ['ACTIVE', 'NOT_START', 'CLOSED']
@@ -128,7 +128,10 @@ definitions:
     properties:
       option_code:
         type: "string"
+        example: "a"
       option_detail:
         type: "string"
+        example: "Great"
       number_of_vote:
         type: "integer"
+        example: 999
